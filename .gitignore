@@ -1,4 +1,6 @@
 [Oo]bj/
-[Bb]in/
 *.obj
 obj
+[Bb]in/
+*.bin
+bin
