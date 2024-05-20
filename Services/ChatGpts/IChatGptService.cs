@@ -2,7 +2,7 @@ using System;
 using SyncStyle.Model;
 using SyncStyle.ViewModel;
 
-namespace SyncStyle.Services.ChatGpts
+namespace SyncStyle.ChatGpts
 {
     public interface IChatGptService
     {

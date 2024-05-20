@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using SyncStyle.ChatGpts;
+using SyncStyle.EntityConfiguraiton;
 using SyncStyle.Model;
+using SyncStyle.Services.Members;
+using SyncStyle.Services.StyleSyncProds;
 
 namespace SyncStyle.DbContexts
 {
@@ -13,24 +17,13 @@ namespace SyncStyle.DbContexts
         public DbSet<Member> Members { get; set; }
         public DbSet<StyleSyncProd> StyleSyncProds { get; set; }
 
-    }
-    public class StyleSyncContextDesignFactory : IDesignTimeDbContextFactory<StyleSyncContext>
-    {
-        private readonly IConfiguration configuration;
-        public StyleSyncContextDesignFactory(IConfiguration configuration)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            this.configuration = configuration;
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new MemberEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new StyleSyncEntityConfiguration());
+
         }
 
-        public StyleSyncContext CreateDbContext(string[] args)
-        {
-        
-            var optionsBuilder = new DbContextOptionsBuilder<StyleSyncContext>()
-                .UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
-
-
-
-            return new StyleSyncContext(optionsBuilder.Options);
-        }
     }
 }

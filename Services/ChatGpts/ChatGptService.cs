@@ -2,9 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using OpenAI;
 using OpenAI.Chat;
 using SyncStyle.DbContexts;
-using SyncStyle.Services.ChatGpts;
 using SyncStyle.ViewModel;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SyncStyle.ChatGpts
 {

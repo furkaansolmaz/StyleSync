@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SyncStyle.Services.ChatGpts;
+using SyncStyle.ChatGpts;
 using SyncStyle.Services.Members;
 using SyncStyle.ViewModel;
 
