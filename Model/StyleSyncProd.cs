@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace SyncStyle.Model
 {
     public class StyleSyncProd

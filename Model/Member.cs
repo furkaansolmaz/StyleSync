@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using SyncStyle.EnumType;
 
 namespace SyncStyle.Model

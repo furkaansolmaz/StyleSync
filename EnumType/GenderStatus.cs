@@ -6,9 +6,12 @@ namespace SyncStyle.EnumType
     public enum GenderStatus
     {
         [Display(Name = "Erkek")]
-        Man = 1,
+        Male = 1,
 
         [Display(Name = "Kadın")]
-        Woman = 2,
+        Female = 2,
+        
+        [Display(Name = "Diğer")]
+        Other = 3,
     }
 }

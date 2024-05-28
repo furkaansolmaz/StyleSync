@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SyncStyle.Migrations
 {
     /// <inheritdoc />
-    public partial class Style_Sync_new_Project : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,10 +24,10 @@ namespace SyncStyle.Migrations
                 columns: table => new
                 {
                     MemberId = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(25)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(50)", nullable: false),
+                    LastName = table.Column<string>(type: "varchar(50)", nullable: false),
+                    UserName = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Password = table.Column<string>(type: "varchar(25)", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Gender = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
@@ -43,7 +43,7 @@ namespace SyncStyle.Migrations
                 {
                     StyleSyncProdId = table.Column<int>(type: "integer", nullable: false),
                     MemberId = table.Column<int>(type: "integer", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(4000)", nullable: false),
+                    Image = table.Column<string>(type: "varchar(4000)", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>

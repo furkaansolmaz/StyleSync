@@ -35,9 +35,9 @@ namespace SyncStyle.EntityConfiguraiton
 
             builder.Property(ct => ct.Gender)
                 .IsRequired()
-                .HasColumnType("varchar(50)")
+                .HasColumnType("varchar(10)")
                 .HasConversion(
-                    v => v.ToString().ToLower(),
+                    v => v.ToString(),
                     s => (GenderStatus)Enum.Parse(typeof(GenderStatus), s));
 
             builder.Property(r => r.IsActive)

@@ -12,8 +12,8 @@ using SyncStyle.DbContexts;
 namespace SyncStyle.Migrations
 {
     [DbContext(typeof(StyleSyncContext))]
-    [Migration("20240520143443_Style_Sync_new_Project")]
-    partial class Style_Sync_new_Project
+    [Migration("20240521125325_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

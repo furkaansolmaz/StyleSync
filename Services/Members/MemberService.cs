@@ -4,7 +4,7 @@ using SyncStyle.Model;
 using SyncStyle.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-
+using SyncStyle.EnumType;
 
 namespace SyncStyle.Services.Members
 {
@@ -17,6 +17,13 @@ namespace SyncStyle.Services.Members
         }
         public async Task<MemberResponseViewModel> Add(MemberViewModel viewModel)
         {
+            var query = await _styleSyncContext.Members.Where(i => i.UserName == viewModel.UserName).FirstOrDefaultAsync();
+
+            if(query != null)
+            {
+                throw new Exception("Aynı isimde bir User Name vardır.Başka bir User Name ile deneyiniz.");
+            }
+            
             var member = new Member()
             {
                 Name = viewModel.Name,
@@ -24,7 +31,7 @@ namespace SyncStyle.Services.Members
                 UserName = viewModel.UserName,
                 Password = viewModel.Password,
                 DateOfBirth = viewModel.DateOfBirth,
-                Gender = viewModel.Gender,
+                Gender = (GenderStatus)viewModel.Gender,
                 IsActive = true,
             };
 

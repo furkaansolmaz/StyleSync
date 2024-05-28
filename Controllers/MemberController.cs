@@ -15,7 +15,7 @@ namespace SyncStyle.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(MemberViewModel viewModel)
+        public async Task<IActionResult> Add([FromBody] MemberViewModel viewModel)
         {
             await _memberService.Add(viewModel);
             return Ok();

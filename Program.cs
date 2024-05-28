@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SyncStyle.ChatGpts;
 using SyncStyle.DbContexts;
+using SyncStyle.Services.Logins;
 using SyncStyle.Services.Members;
 using SyncStyle.Services.StyleSyncProds;
 
@@ -18,9 +19,26 @@ builder.Services.AddDbContext<StyleSyncContext>(o => {
 });
 
 
+builder.Services.AddCors(options =>
+             {
+                 options.AddPolicy("CorsPolicy",
+                     builder => builder
+                      //.AllowAnyOrigin()
+                      .WithOrigins(
+                             "http://localhost:8527"
+                             )
+                     .AllowAnyMethod()
+                     .AllowAnyHeader()
+                     .AllowCredentials()
+                     .SetIsOriginAllowed((host) => true) //for signalr cors                
+                         );
+             });
+
+
 builder.Services.AddTransient<IMemberService, MemberService>();
 builder.Services.AddTransient<IStyleSyncProdService, StyleSyncProdService>();
 builder.Services.AddTransient<IChatGptService, ChatGptService>();
+builder.Services.AddTransient<ILoginService, LoginService>();
 
 
 var app = builder.Build();
@@ -33,10 +51,17 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection();
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+    {
+        var context = scope.ServiceProvider.GetService<StyleSyncContext>();
+        context.Database.Migrate();
+    }
 
 app.Run();
 
