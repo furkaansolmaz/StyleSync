@@ -15,10 +15,10 @@ namespace SyncStyle.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(StyleSyncProdViewModel viewModel)
+        public async Task<IActionResult> Add([FromBody] StyleSyncProdViewModel viewModel)
         {
-            await _styleSyncProdService.Add(viewModel);
-            return Ok();
+            var result = await _styleSyncProdService.Add(viewModel);
+            return Ok(result.StyleSyncProdId);
         }
         
         [HttpDelete]
@@ -29,9 +29,9 @@ namespace SyncStyle.Controllers
         }
         
         [HttpGet("getAll")]
-        public async Task<ActionResult> GetAll(int pageIndex, int pageSize, string searchQuery)
+        public async Task<ActionResult> GetAll(int memberId)
         {
-            var result = await _styleSyncProdService.GetList();
+            var result = await _styleSyncProdService.GetList(memberId);
             return Ok(result);
         }
 

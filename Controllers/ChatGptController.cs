@@ -1,16 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using SyncStyle.ChatGpts;
-using SyncStyle.Services.Members;
 using SyncStyle.ViewModel;
 
 namespace SyncStyle.Controllers
 {    
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class ChatGptServiceController : ControllerBase
+    public class ChatGptController : ControllerBase
     {
         private readonly IChatGptService _chatGptService;
-        public ChatGptServiceController(IChatGptService chatGptService)
+        public ChatGptController(IChatGptService chatGptService)
         {
             _chatGptService = chatGptService;
         }

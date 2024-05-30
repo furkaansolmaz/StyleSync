@@ -18,8 +18,8 @@ namespace SyncStyle.Services.StyleSyncProds
         {
             var styleSync = new StyleSyncProd()
             {
+                MemberId = viewModel.MemberId,
                 Image = viewModel.Image,
-                IsActive = true,
             };
 
 			await _styleSyncContext.StyleSyncProds.AddAsync(styleSync);
@@ -41,9 +41,9 @@ namespace SyncStyle.Services.StyleSyncProds
             await _styleSyncContext.SaveChangesAsync();
         }
 
-        public async Task<List<StyleSyncProd>> GetList()
+        public async Task<List<StyleSyncProd>> GetList(int memberId)
         {
-             var list = await _styleSyncContext.StyleSyncProds.Where(ci => ci.IsActive).AsNoTracking().ToListAsync();
+             var list = await _styleSyncContext.StyleSyncProds.Where(ci => ci.IsActive && ci.MemberId == memberId).AsNoTracking().ToListAsync();
              if(list == null)
              {
                 throw new Exception ("Listenecek Fotoğraf bilgisi bulunamadı.");

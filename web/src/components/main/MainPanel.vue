@@ -21,6 +21,7 @@ export default {
   name: 'MainPanel',
   methods: {
     logout() {
+      localStorage.clear()
       this.$router.push('/login');
     }
   }

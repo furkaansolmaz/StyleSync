@@ -6,6 +6,7 @@ namespace SyncStyle.Model
 {
     public class Member
     {
+        [Key]
         public int MemberId { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
@@ -14,5 +15,7 @@ namespace SyncStyle.Model
         public DateTime DateOfBirth { get; set; }
         public GenderStatus Gender{ get; set; }
         public bool IsActive{ get; set; }
+        public virtual ICollection<StyleSyncProd> StyleSyncProds { get; set; }
+
     } 
 }

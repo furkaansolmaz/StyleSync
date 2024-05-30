@@ -17,7 +17,7 @@ namespace SyncStyle.ChatGpts
         public async Task<ChatGbtResponseViewModel> ChatGptRequest(ChatGbtRequestViewModel viewModel)
         {
             
-            OpenAIClient client = new OpenAIClient("sk-proj-cxbRWqYJTTKyzYUtmEzfT3BlbkFJ6aIj5VRBtOBuNMS5bnBg");
+            OpenAIClient client = new OpenAIClient("sk-proj-Qc7OJrYBss4NK5KMUdq9T3BlbkFJ4Qp5rlre0tdVbsurkzPY");
 
             var content = new List<Content>
             {
@@ -33,7 +33,7 @@ namespace SyncStyle.ChatGpts
             }
             content.AddRange(styleSyncProd.Select(
                 i => new Content
-                    (imageUrl: new ImageUrl(url: i.Image)))
+                    (imageUrl: new ImageUrl(url: "data:image/png;base64," + i.Image)))
             );
 
             var messages = new List<Message>

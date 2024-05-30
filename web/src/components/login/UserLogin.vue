@@ -35,6 +35,7 @@ export default {
         username: '',
         password: ''
       },
+      memberId: null,
       rules: {
         username: [
           { required: true, message: 'Please input username', trigger: 'blur' }
@@ -46,20 +47,23 @@ export default {
     };
   },
   methods: {
-    login() {
-      request('get', `api/v1/login?username=${this.loginForm.username}&password=${this.loginForm.password}`)
-        .then(() => {
+    async login() {
+      request('get', 'api/v1/login?username=' + this.loginForm.username + '&password=' + this.loginForm.password)
+        .then((v) => {
           console.log('loginned : ')
+          console.log(v.data)
+          localStorage.setItem('memberId', v.data);
+          this.$notify.success('Login successful.')
           this.$router.push({ path: '/home' });
-          this.$notify.success('Login Olundu.')
         })
         .catch(() => {
           console.log('error submit!!');
+          this.$notify.error('Login failed. Please check your credentials.');
         });
     },
     goToSignUp() {
       this.dialogFormVisible = true;
-    }
+    },
   }
 };
 </script>

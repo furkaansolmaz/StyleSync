@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import UserLogin from '@/components/UserLogin.vue';
+import UserLogin from '@/components/login/UserLogin.vue';
 import HomePage from '@/components/main/HomePage.vue';
 import StyleSync from '@/components/main/StyleSync.vue';
 import MemberInfo from '@/components/main/MemberInfo.vue';
