@@ -4,5 +4,7 @@ namespace SyncStyle.ViewModel
     {
         public int[] StyleSyncProdId { get; set; }
         public string InformationRequest { get; set; }
+        public string City { get; set; }
+
     }
 }

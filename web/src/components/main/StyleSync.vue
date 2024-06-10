@@ -41,7 +41,9 @@
             </template>
           </el-table-column>
         </el-table>
-
+        <div class="request-input-section">
+          <el-input v-model="city" placeholder="Konum Seçiniz" :disabled="!isImageSelected"></el-input>
+        </div>
         <div class="request-input-section">
           <el-input v-model="informationRequest" placeholder="Bilgi talebi giriniz" :disabled="!isImageSelected"></el-input>
           <el-button type="primary" class="chat-button" @click="sendSelectedImages" :disabled="!isImageSelected">Seçili Resimleri Gönder</el-button>
@@ -68,6 +70,7 @@ export default {
       informationRequest: '',
       isImageSelected: false,
       responseChat: null,
+      city: null,
     };
   },
   methods: {
@@ -141,7 +144,8 @@ export default {
       console.log(styleSyncProdId)
       const viewModel = {
         styleSyncProdId: styleSyncProdId,
-        informationRequest: this.informationRequest
+        informationRequest: this.informationRequest,
+        city : this.city
       };
 
       request('post', `api/v1/chatgpt`, viewModel).then(response => {

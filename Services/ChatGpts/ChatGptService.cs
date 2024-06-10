@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using OpenAI;
 using OpenAI.Chat;
 using SyncStyle.DbContexts;
+using SyncStyle.OpenWeatherMaps;
 using SyncStyle.ViewModel;
 
 namespace SyncStyle.ChatGpts
@@ -9,15 +10,20 @@ namespace SyncStyle.ChatGpts
     public class ChatGptService : IChatGptService
     {
         private readonly StyleSyncContext _styleSyncContext;
-        public ChatGptService(StyleSyncContext styleSyncContext)
+        private readonly IWeatherService _weatherService;
+
+
+        public ChatGptService(StyleSyncContext styleSyncContext,
+                            IWeatherService weatherService)
         {
+            _weatherService = weatherService;
             _styleSyncContext = styleSyncContext;
         }
 
         public async Task<ChatGbtResponseViewModel> ChatGptRequest(ChatGbtRequestViewModel viewModel)
         {
-            
-            OpenAIClient client = new OpenAIClient("sk-proj-Qc7OJrYBss4NK5KMUdq9T3BlbkFJ4Qp5rlre0tdVbsurkzPY");
+            string key = "chatgptApiKey";
+            OpenAIClient client = new OpenAIClient(key);
 
             var content = new List<Content>
             {
@@ -27,6 +33,8 @@ namespace SyncStyle.ChatGpts
 
             var styleSyncProd = await _styleSyncContext.StyleSyncProds.Where(i => viewModel.StyleSyncProdId.Contains(i.StyleSyncProdId)).ToListAsync();
 
+            var location = await _weatherService.GetWeatherAsync(viewModel.City);
+
             if(styleSyncProd == null)
             {
                 throw new Exception("Görsel eklemeniz gerekmektedir.");
@@ -35,6 +43,8 @@ namespace SyncStyle.ChatGpts
                 i => new Content
                     (imageUrl: new ImageUrl(url: "data:image/png;base64," + i.Image)))
             );
+
+            content.Add(new Content(input : location));
 
             var messages = new List<Message>
             {

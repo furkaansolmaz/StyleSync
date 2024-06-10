@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SyncStyle.ChatGpts;
 using SyncStyle.DbContexts;
+using SyncStyle.OpenWeatherMaps;
 using SyncStyle.Services.Logins;
 using SyncStyle.Services.Members;
 using SyncStyle.Services.StyleSyncProds;
@@ -39,7 +40,10 @@ builder.Services.AddTransient<IMemberService, MemberService>();
 builder.Services.AddTransient<IStyleSyncProdService, StyleSyncProdService>();
 builder.Services.AddTransient<IChatGptService, ChatGptService>();
 builder.Services.AddTransient<ILoginService, LoginService>();
+builder.Services.AddHttpClient<IWeatherService, WeatherService>(client => { client.BaseAddress = new Uri("http://api.openweathermap.org/"); });
+builder.Services.AddSingleton<IWeatherService>(sp => { var httpClient = sp.GetRequiredService<HttpClient>();
 
+var apiKey = "openWeathermapApiKey"; return new WeatherService(httpClient, apiKey);});
 
 var app = builder.Build();
 
