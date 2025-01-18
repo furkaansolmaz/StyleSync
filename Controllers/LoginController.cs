@@ -18,7 +18,7 @@ namespace SyncStyle.Controllers
         public async Task<IActionResult> Login(string username, string password)
         {
             var result = await _loginService.Login(username, password);
-            return Ok(result.MemberId);
+            return Ok(result.Id);
         }
     }
 }

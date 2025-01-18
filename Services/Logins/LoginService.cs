@@ -15,9 +15,9 @@ namespace SyncStyle.Services.Logins
         {
             _styleSyncContext = styleSyncContext;
         }
-        public async Task<Member> Login(string username, string password)
+        public async Task<User> Login(string username, string password)
         {
-            var query = await _styleSyncContext.Members.Where(i => i.UserName == username && i.Password == password && i.IsActive).FirstOrDefaultAsync();
+            var query = await _styleSyncContext.Users.Where(i => i.UserName == username && i.Password == password && i.IsActive).FirstOrDefaultAsync();
 
             if(query == null)
             {

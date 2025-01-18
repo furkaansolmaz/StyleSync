@@ -1,18 +1,18 @@
 <template>
   <el-container>
     <el-header class="header">
-      <p>Member Information</p>
+      <p>User Information</p>
     </el-header><br><br><br><br>
     <el-main class="main">
-      <el-form :model="member" label-width="120px" class="member-form">
+      <el-form :model="user" label-width="120px" class="user-form">
         <el-form-item label="First Name">
-          <el-input v-model="member.firstName" size="small" readonly></el-input>
+          <el-input v-model="user.firstName" size="small" readonly></el-input>
         </el-form-item>
         <el-form-item label="Last Name">
-          <el-input v-model="member.lastName" size="small" readonly></el-input>
+          <el-input v-model="user.lastName" size="small" readonly></el-input>
         </el-form-item>
         <el-form-item label="Birth Date">
-          <el-date-picker v-model="member.birthDate" type="date" placeholder="Select a date" size="small" readonly></el-date-picker>
+          <el-date-picker v-model="user.birthDate" type="date" placeholder="Select a date" size="small" readonly></el-date-picker>
         </el-form-item>
       </el-form>
     </el-main>
@@ -21,10 +21,10 @@
 
 <script>
 export default {
-  name: 'MemberInfo',
+  name: 'UserInfo',
   data() {
     return {
-      member: {
+      user: {
         firstName: 'Furkan', // z
         lastName: 'solmaz',   // Örneğin: this.member.firstName = gelenVeri.firstName;
         birthDate: '2000-01-01'
@@ -51,7 +51,7 @@ export default {
   margin-left: 20px; /* Formu biraz sola kaydırır */
 }
 
-.member-form {
+.user-form {
   width: 400px;
 }
 

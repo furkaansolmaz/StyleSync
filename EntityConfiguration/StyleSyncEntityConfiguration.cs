@@ -16,14 +16,14 @@ namespace SyncStyle.EntityConfiguraiton
                 .IsRequired()
                 .UseHiLo("style_sync_prod_id_hilo");
 
-            builder.Property(ci => ci.MemberId)
+            builder.Property(ci => ci.UserId)
                 .IsRequired(true);
             
-            builder.HasIndex(ct=>ct.MemberId)
+            builder.HasIndex(ct=>ct.UserId)
                     .IsUnique();
     
-            builder.Property(ct => ct.Image)
-                .HasColumnType("nvarchar(160000)");
+            builder.Property(ct => ct.ImageUrl)
+                .HasColumnType("varchar(160000)");
 
             builder.Property(r => r.IsActive)
                 .IsRequired();

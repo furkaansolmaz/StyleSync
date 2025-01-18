@@ -2,7 +2,7 @@ namespace SyncStyle.ViewModel
 {
     public class StyleSyncProdViewModel
     {
-        public int MemberId { get; set; }
-        public string Image { get; set; }
+        public int UserId { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
     }
 }

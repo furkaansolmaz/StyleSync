@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import UserLogin from '@/components/login/UserLogin.vue';
 import HomePage from '@/components/main/HomePage.vue';
 import StyleSync from '@/components/main/StyleSync.vue';
-import MemberInfo from '@/components/main/MemberInfo.vue';
+import UserInfo from '@/components/main/UserInfo.vue';
 import MainLayout from '@/components/MainLayout.vue';
 
 Vue.use(Router);
@@ -30,9 +30,9 @@ export default new Router({
           component: StyleSync
         },
         {
-          path: 'member-info',
-          name: 'MemberInfo',
-          component: MemberInfo
+          path: 'user-info',
+          name: 'UserInfo',
+          component: UserInfo
         }
       ]
     },

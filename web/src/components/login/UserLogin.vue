@@ -35,7 +35,7 @@ export default {
         username: '',
         password: ''
       },
-      memberId: null,
+      userId: null,
       rules: {
         username: [
           { required: true, message: 'Please input username', trigger: 'blur' }
@@ -52,7 +52,7 @@ export default {
         .then((v) => {
           console.log('loginned : ')
           console.log(v.data)
-          localStorage.setItem('memberId', v.data);
+          localStorage.setItem('userId', v.data);
           this.$notify.success('Login successful.')
           this.$router.push({ path: '/home' });
         })

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using SyncStyle.ChatGpts;
 using SyncStyle.EntityConfiguraiton;
 using SyncStyle.Model;
-using SyncStyle.Services.Members;
+using SyncStyle.Services.Users;
 using SyncStyle.Services.StyleSyncProds;
 
 namespace SyncStyle.DbContexts
@@ -14,7 +14,7 @@ namespace SyncStyle.DbContexts
         public StyleSyncContext(DbContextOptions<StyleSyncContext> options) : base(options)
         {
         }
-        public DbSet<Member> Members { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<StyleSyncProd> StyleSyncProds { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

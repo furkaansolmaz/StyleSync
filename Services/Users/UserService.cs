@@ -6,47 +6,49 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using SyncStyle.EnumType;
 
-namespace SyncStyle.Services.Members
+namespace SyncStyle.Services.Users
 {
-    public class MemberService : IMemberService
+    public class UserService : IUserService
     {
         private readonly StyleSyncContext _styleSyncContext;
-        public MemberService(StyleSyncContext styleSyncContext)
+        public UserService(StyleSyncContext styleSyncContext)
         {
             _styleSyncContext = styleSyncContext;
         }
-        public async Task<MemberResponseViewModel> Add(MemberViewModel viewModel)
+        public async Task<UserResponseViewModel> Add(UserViewModel viewModel)
         {
-            var query = await _styleSyncContext.Members.Where(i => i.UserName == viewModel.UserName).FirstOrDefaultAsync();
+            var query = await _styleSyncContext.Users.Where(i => i.UserName == viewModel.UserName).FirstOrDefaultAsync();
 
             if(query != null)
             {
                 throw new Exception("Aynı isimde bir User Name vardır.Başka bir User Name ile deneyiniz.");
             }
             
-            var member = new Member()
+            var user = new User()
             {
                 Name = viewModel.Name,
                 LastName = viewModel.LastName,
                 UserName = viewModel.UserName,
                 Password = viewModel.Password,
                 DateOfBirth = viewModel.DateOfBirth,
+                Role = RoleName.User,
+                CreateDate = DateTime.Now,
                 Gender = (GenderStatus)viewModel.Gender,
                 IsActive = true,
             };
 
-			await _styleSyncContext.Members.AddAsync(member);
+			await _styleSyncContext.Users.AddAsync(user);
             await _styleSyncContext.SaveChangesAsync();
 
-            var response = new MemberResponseViewModel()
+            var response = new UserResponseViewModel()
             {
-                MemberId = member.MemberId,
-                Name = member.Name,
-                LastName = member.LastName,
-                UserName = member.UserName,
-                DateOfBirth = member.DateOfBirth,
-                Gender = member.Gender,
-                IsActive = member.IsActive
+                MemberId = user.Id,
+                Name = user.Name,
+                LastName = user.LastName,
+                UserName = user.UserName,
+                DateOfBirth = user.DateOfBirth,
+                Gender = user.Gender,
+                IsActive = user.IsActive
             };
 
             return response;
@@ -54,7 +56,7 @@ namespace SyncStyle.Services.Members
 
         public async Task Delete(int memberId)
         {
-            var result = _styleSyncContext.Members.Where(i => i.MemberId == memberId && i.IsActive).FirstOrDefault();
+            var result = _styleSyncContext.Users.Where(i => i.Id == memberId && i.IsActive).FirstOrDefault();
 
             if (result == null)
             {
@@ -63,7 +65,7 @@ namespace SyncStyle.Services.Members
 
 			result.IsActive = false;
 
-			_styleSyncContext.Members.Attach(result);
+			_styleSyncContext.Users.Attach(result);
             await _styleSyncContext.SaveChangesAsync();
         }
     }

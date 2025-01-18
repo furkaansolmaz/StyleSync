@@ -97,9 +97,9 @@ export default {
     },
     uploadImage() {
       const base64Image = this.imageUrl.split(',')[1];
-      const memberId = localStorage.getItem('memberId');
+      const userId = localStorage.getItem('userId');
       const viewModel = {
-        memberId: memberId,
+        userId: userId,
         image: base64Image
       };
       request('post', `api/v1/stylesyncprod`, viewModel).then((v) => {
@@ -124,7 +124,7 @@ export default {
       this.image = null; 
     },
     listImage(){
-      request('get', `api/v1/stylesyncprod/getAll?memberId=` + localStorage.getItem('memberId')).then((v) => {
+      request('get', `api/v1/stylesyncprod/getAll?userId=` + localStorage.getItem('userId')).then((v) => {
         this.$message.success('Resimler listelendi!');
         this.imageList = v.data.map(item => ({
           id: item.styleSyncProdId,

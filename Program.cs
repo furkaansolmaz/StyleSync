@@ -3,7 +3,7 @@ using SyncStyle.ChatGpts;
 using SyncStyle.DbContexts;
 using SyncStyle.OpenWeatherMaps;
 using SyncStyle.Services.Logins;
-using SyncStyle.Services.Members;
+using SyncStyle.Services.Users;
 using SyncStyle.Services.StyleSyncProds;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,35 +15,44 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<StyleSyncContext>(o => {
-    o.UseNpgsql("User ID=postgres;Password=Passw0rd01.;Server=localhost;Port=5432;Database=StyleSyncDb;Integrated Security=true;Pooling=true;");
+// Configure DbContext with connection string from appsettings.json
+builder.Services.AddDbContext<StyleSyncContext>(options => 
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    options.UseNpgsql(connectionString);
 });
 
-
+// Configure CORS
 builder.Services.AddCors(options =>
-             {
-                 options.AddPolicy("CorsPolicy",
-                     builder => builder
-                      //.AllowAnyOrigin()
-                      .WithOrigins(
-                             "http://localhost:8527"
-                             )
-                     .AllowAnyMethod()
-                     .AllowAnyHeader()
-                     .AllowCredentials()
-                     .SetIsOriginAllowed((host) => true) //for signalr cors                
-                         );
-             });
+{
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:8527")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials()
+              .SetIsOriginAllowed(_ => true); // For SignalR
+    });
+});
 
-
-builder.Services.AddTransient<IMemberService, MemberService>();
+// Register services
+builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IStyleSyncProdService, StyleSyncProdService>();
 builder.Services.AddTransient<IChatGptService, ChatGptService>();
 builder.Services.AddTransient<ILoginService, LoginService>();
-builder.Services.AddHttpClient<IWeatherService, WeatherService>(client => { client.BaseAddress = new Uri("http://api.openweathermap.org/"); });
-builder.Services.AddSingleton<IWeatherService>(sp => { var httpClient = sp.GetRequiredService<HttpClient>();
 
-var apiKey = "openWeathermapApiKey"; return new WeatherService(httpClient, apiKey);});
+// Configure HttpClient for WeatherService
+builder.Services.AddHttpClient<IWeatherService, WeatherService>(client =>
+{
+    client.BaseAddress = new Uri("http://api.openweathermap.org/");
+});
+
+builder.Services.AddSingleton<IWeatherService>(sp =>
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    var apiKey = builder.Configuration["WeatherApiKey"];
+    return new WeatherService(httpClient, apiKey);
+});
 
 var app = builder.Build();
 
@@ -56,16 +65,15 @@ if (app.Environment.IsDevelopment())
 
 // app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
-
 app.UseAuthorization();
 
 app.MapControllers();
 
-using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
-    {
-        var context = scope.ServiceProvider.GetService<StyleSyncContext>();
-        context.Database.Migrate();
-    }
+// Apply pending migrations at startup
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<StyleSyncContext>();
+    context.Database.Migrate();
+}
 
 app.Run();
-

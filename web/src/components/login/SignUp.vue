@@ -88,33 +88,37 @@ export default {
     },
   },
   methods: {
-    handleSignUp() {
-      this.$refs.signupForm.validate((valid) => {
+handleSignUp() {
+  console.log("furkan1")
+    this.$refs.signupForm.validate((valid) => {
         if (valid) {
-          const date = new Date(this.signupForm.dateOfBirth);
+            console.log("furkan2")
+            const date = new Date(this.signupForm.dateOfBirth);
 
-          const requestData = {
-              name: this.signupForm.name,
-              lastname: this.signupForm.lastname,
-              username: this.signupForm.username,
-              password: this.signupForm.password,
-              dateOfBirth: date,
-              gender: this.signupForm.gender,
-          };
-          request('post','api/v1/member', requestData)
-            .then(() => {
-              console.log('signup successful');
-              this.$notify.success('Başarılı şekilde kaydınız oluşmuştur.')
-              this.closeDialog()
-            })
-            .catch((error) => {
-              console.error('Error during signup:', error);
-            });
+            const requestData = {
+                name: this.signupForm.name,
+                lastname: this.signupForm.lastname,
+                username: this.signupForm.username,
+                password: this.signupForm.password,
+                dateOfBirth: date,
+                gender: this.signupForm.gender,
+            };
+            console.log("furkan3")
+            request('post', 'api/v1/user', requestData)
+                .then(() => {
+                    console.log("furkan4")
+                    console.log('signup successful');
+                    this.$notify.success('Başarılı şekilde kaydınız oluşmuştur.');
+                    this.closeDialog();
+                })
+                .catch((error) => {
+                    console.error('Error during signup:', error);
+                });
         } else {
-          console.log('error submit!!');
-          return false;
+            console.log('error submit!!');
+            return false;
         }
-      });
+    });
     },
     closeDialog() {
       this.$emit('update:dialogFormVisible', false);

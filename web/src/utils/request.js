@@ -111,7 +111,7 @@ service.interceptors.response.use(
 
             errorMessage = i18n.t("errors.networkerror"); // 'Giriş esnasında bir hata oluştu.(101)';
         } else {
-            console.log("7");
+            console.log("7"); 
 
             Notification({
                 type: "error",
@@ -123,9 +123,9 @@ service.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-
 function generateMessage(errors) {
     var message = "";
+    console.log('Backend Errors:', errors);  // Burada backend'den gelen hataları kontrol edebilirsiniz
     if (Array.isArray(errors)) {
         errors.forEach(element => {
             message +=
@@ -139,9 +139,9 @@ function generateMessage(errors) {
     } else {
         message = "<b><br>" + errors + "</br><b>";
     }
-
     return message;
 }
+
 export default (method, resource, data, baseUrl, config = undefined) =>
     service({
         method,

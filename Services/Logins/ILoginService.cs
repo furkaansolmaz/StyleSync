@@ -5,6 +5,6 @@ namespace SyncStyle.Services.Logins
 {
     public interface ILoginService
     {
-        Task<Member> Login(string username, string password);
+        Task<User> Login(string username, string password);
     }
 }

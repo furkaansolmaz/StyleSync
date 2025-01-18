@@ -7,10 +7,9 @@ namespace SyncStyle.Model
     {
         [Key]
         public int StyleSyncProdId { get; set; }
-        [ForeignKey("Member")]
-        public int MemberId { get; set; }
-        public string Image { get; set; }
+        [ForeignKey("User")]
+        public int UserId { get; set; }
         public bool IsActive { get; set; } = true;
-
+        public string ImageUrl { get; internal set;  }
     } 
 }

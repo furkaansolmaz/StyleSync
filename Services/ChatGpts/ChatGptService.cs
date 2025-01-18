@@ -12,9 +12,8 @@ namespace SyncStyle.ChatGpts
         private readonly StyleSyncContext _styleSyncContext;
         private readonly IWeatherService _weatherService;
 
-
         public ChatGptService(StyleSyncContext styleSyncContext,
-                            IWeatherService weatherService)
+                              IWeatherService weatherService)
         {
             _weatherService = weatherService;
             _styleSyncContext = styleSyncContext;
@@ -27,24 +26,25 @@ namespace SyncStyle.ChatGpts
 
             var content = new List<Content>
             {
-                new Content
-                (input: viewModel.InformationRequest)
+                new Content(input: viewModel.InformationRequest)
             };
 
-            var styleSyncProd = await _styleSyncContext.StyleSyncProds.Where(i => viewModel.StyleSyncProdId.Contains(i.StyleSyncProdId)).ToListAsync();
+            var styleSyncProd = await _styleSyncContext.StyleSyncProds
+                .Where(i => viewModel.StyleSyncProdId.Contains(i.StyleSyncProdId))
+                .ToListAsync();
 
             var location = await _weatherService.GetWeatherAsync(viewModel.City);
 
-            if(styleSyncProd == null)
+            if (styleSyncProd == null || !styleSyncProd.Any())
             {
                 throw new Exception("Görsel eklemeniz gerekmektedir.");
             }
-            content.AddRange(styleSyncProd.Select(
-                i => new Content
-                    (imageUrl: new ImageUrl(url: "data:image/png;base64," + i.Image)))
-            );
 
-            content.Add(new Content(input : location));
+            content.AddRange(styleSyncProd.Select(
+                i => new Content(imageUrl: new ImageUrl(url: i.ImageUrl))
+            ));
+
+            content.Add(new Content(input: location));
 
             var messages = new List<Message>
             {
@@ -64,7 +64,6 @@ namespace SyncStyle.ChatGpts
             {
                 InformationResponse = response.Choices[0]
             };
-
         }
     }
 }

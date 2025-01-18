@@ -6,7 +6,7 @@
     <nav class="main-panel-nav">
       <router-link to="/home">Home</router-link>
       <router-link to="/style-sync">StyleSync</router-link>
-      <router-link to="/member-info">Member Information</router-link>
+      <router-link to="/user-info">User Information</router-link>
     </nav>
     <div class="logout-container">
       <button @click="logout" class="logout-button">
