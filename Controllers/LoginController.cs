@@ -14,11 +14,18 @@ namespace SyncStyle.Controllers
             _loginService = loginService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Login(string username, string password)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
-            var result = await _loginService.Login(username, password);
-            return Ok(result.Id);
+            try
+            {
+                var result = await _loginService.Login(model);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

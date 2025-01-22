@@ -42,7 +42,7 @@ namespace SyncStyle.Services.Users
 
             var response = new UserResponseViewModel()
             {
-                MemberId = user.Id,
+                UserId = user.Id,
                 Name = user.Name,
                 LastName = user.LastName,
                 UserName = user.UserName,
@@ -67,6 +67,51 @@ namespace SyncStyle.Services.Users
 
 			_styleSyncContext.Users.Attach(result);
             await _styleSyncContext.SaveChangesAsync();
+        }
+
+        public async Task<UserResponseViewModel> Register(RegisterViewModel viewModel)
+        {
+            var existingUser = await _styleSyncContext.Users
+                .Where(i => i.UserName == viewModel.UserName)
+                .FirstOrDefaultAsync();
+
+            if (existingUser != null)
+            {
+                throw new Exception("Username already exists. Please choose a different username.");
+            }
+
+            if (string.IsNullOrEmpty(viewModel.Password) || viewModel.Password.Length < 6)
+            {
+                throw new Exception("Password must be at least 6 characters long.");
+            }
+            
+            var user = new User
+            {
+                Name = viewModel.Name,
+                LastName = viewModel.LastName,
+                UserName = viewModel.UserName,
+                Password = viewModel.Password,
+                DateOfBirth = viewModel.DateOfBirth,
+                Role = RoleName.User,
+                CreateDate = DateTime.Now,
+                Gender = (GenderStatus)viewModel.Gender,
+                IsActive = true,
+            };
+
+            await _styleSyncContext.Users.AddAsync(user);
+            await _styleSyncContext.SaveChangesAsync();
+
+            return new UserResponseViewModel
+            {
+                UserId = user.Id,
+                Name = user.Name,
+                LastName = user.LastName,
+                UserName = user.UserName,
+                DateOfBirth = user.DateOfBirth,
+                Gender = user.Gender,
+                IsActive = user.IsActive,
+                Role = user.Role
+            };
         }
     }
 }

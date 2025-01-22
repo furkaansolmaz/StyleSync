@@ -11,20 +11,35 @@ namespace SyncStyle.Services.Logins
     public class LoginService : ILoginService
     {
         private readonly StyleSyncContext _styleSyncContext;
+        
         public LoginService(StyleSyncContext styleSyncContext)
         {
             _styleSyncContext = styleSyncContext;
         }
-        public async Task<User> Login(string username, string password)
-        {
-            var query = await _styleSyncContext.Users.Where(i => i.UserName == username && i.Password == password && i.IsActive).FirstOrDefaultAsync();
 
-            if(query == null)
+        public async Task<UserResponseViewModel> Login(LoginViewModel loginModel)
+        {
+            var user = await _styleSyncContext.Users
+                .Where(i => i.UserName == loginModel.UserName && 
+                           i.IsActive)
+                .FirstOrDefaultAsync();
+
+            if (user == null || user.Password != loginModel.Password)
             {
-                throw new Exception("Kullanıcı bilgileriniz yanlıştır.");
+                throw new Exception("Invalid username or password.");
             }
 
-            return query;
+            return new UserResponseViewModel
+            {
+                UserId = user.Id,
+                Name = user.Name,
+                LastName = user.LastName,
+                UserName = user.UserName,
+                DateOfBirth = user.DateOfBirth,
+                Gender = user.Gender,
+                IsActive = user.IsActive,
+                Role = user.Role
+            };
         }
     }
 }

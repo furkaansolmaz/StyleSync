@@ -58,35 +58,33 @@ service.interceptors.response.use(
         return response;
     },
     error => {
-        if (
-            error.response.data.status >= 400 ||
-            error.response.status >= 400 ||
-            error.message !== undefined
-        ) {
-            // eslint-disable-next-line
-            console.log("1");
-        }
-        if (error.response.data.status == 401 || error.response.status == 401) {
-            store.dispatch("user/logout");
-        }
+        // Safely check for error response properties
+        const errorResponse = error.response || {};
+        const errorStatus = errorResponse.status;
+        const errorData = errorResponse.data || {};
+        
         let errorMessage = error.message;
-        if (
-            error.message !== undefined &&
-            error.message === "Request failed with status code 500"
-        ) {
-            errorMessage = i18n.t("errors.500");
-            console.log("2");
-        // } else if (error.response.data.status === 400) {
-        //     MessageBox.confirm(
-        //         error.response.data.errors,
-        //         i18n.t("please input text"),
-        //         {
-        //             confirmButtonText: i18n.t("button.ok"),
-        //             type: "error"
-        //         }
-        //     ).then(() => {});
-        // } else if (error.response.data.status === 422) {
-            var message = generateMessage(error.response.data.errors);
+
+        // Handle 401 Unauthorized
+        if (errorStatus === 401 || errorData.status === 401) {
+            store.dispatch("user/logout");
+            return Promise.reject(new Error(i18n.t("errors.unauthorized") || "Unauthorized access"));
+        }
+        
+        // Handle 404 Not Found
+        if (errorStatus === 404) {
+            errorMessage = i18n.t("errors.404") || "Resource not found";
+            Notification({
+                type: "error",
+                message: errorMessage,
+                duration: 4000
+            });
+            return Promise.reject(new Error(errorMessage));
+        }
+
+        // Handle 422 Validation Error
+        if (errorStatus === 422) {
+            const message = generateMessage(errorData.errors);
             MessageBox.confirm(
                 message,
                 i18n.t("common.validationErrorBoxTitle"),
@@ -95,32 +93,25 @@ service.interceptors.response.use(
                     type: "error",
                     dangerouslyUseHTMLString: true
                 }
-            ).then(() => {});
-            console.log("4");
-        } else if (
-            error.message !== undefined &&
-            error.message === "Request failed with status code 401"
-        ) {
-            store.dispatch("user/logout");
-            //self.$router.push({ path: "/login" });
-        } else if (
-            error.message !== undefined &&
-            error.message === "Network Error"
-        ) {
-            console.log("6");
-
-            errorMessage = i18n.t("errors.networkerror"); // 'Giriş esnasında bir hata oluştu.(101)';
-        } else {
-            console.log("7"); 
-
-            Notification({
-                type: "error",
-                message: i18n.t("Lütfen bilgileri doğru giriniz"),
-                duration: 4000
-            });
+            );
+            return Promise.reject(new Error(message));
         }
-        error.message = errorMessage;
-        return Promise.reject(error);
+
+        // Handle other specific errors
+        if (error.message === "Network Error") {
+            errorMessage = i18n.t("errors.networkerror");
+        } else if (error.message === "Request failed with status code 500") {
+            errorMessage = i18n.t("errors.500");
+        }
+
+        // Show notification for unhandled errors
+        Notification({
+            type: "error",
+            message: errorMessage || i18n.t("Lütfen bilgileri doğru giriniz"),
+            duration: 4000
+        });
+
+        return Promise.reject(new Error(errorMessage));
     }
 );
 function generateMessage(errors) {

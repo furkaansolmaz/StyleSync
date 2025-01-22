@@ -1,10 +1,11 @@
 using System;
 using SyncStyle.Model;
+using SyncStyle.ViewModel;
 
 namespace SyncStyle.Services.Logins
 {
     public interface ILoginService
     {
-        Task<User> Login(string username, string password);
+        Task<UserResponseViewModel> Login(LoginViewModel loginViewModel);
     }
 }

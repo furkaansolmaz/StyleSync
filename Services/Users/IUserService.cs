@@ -8,5 +8,6 @@ namespace SyncStyle.Services.Users
     {
         Task<UserResponseViewModel> Add(UserViewModel viewModel);
         Task Delete(int memberId);
+        Task<UserResponseViewModel> Register(RegisterViewModel viewModel);
     }
 }
