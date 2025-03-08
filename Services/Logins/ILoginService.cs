@@ -6,6 +6,7 @@ namespace SyncStyle.Services.Logins
 {
     public interface ILoginService
     {
-        Task<UserResponseViewModel> Login(LoginViewModel loginViewModel);
+        Task<UserResponseViewModel> Login(LoginViewModel loginModel);
+        Task<bool> ResetPassword(string userName, string email);
     }
 }

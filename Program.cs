@@ -5,6 +5,8 @@ using SyncStyle.OpenWeatherMaps;
 using SyncStyle.Services.Logins;
 using SyncStyle.Services.Users;
 using SyncStyle.Services.StyleSyncProds;
+using Amazon.S3;
+using SyncStyle.Services.AmazonS3;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +37,10 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Amazon services
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<IAmazonS3>();
+builder.Services.AddScoped<IS3Service, S3Service>();
 // Register services
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IStyleSyncProdService, StyleSyncProdService>();

@@ -27,6 +27,12 @@ namespace SyncStyle.EntityConfiguraiton
 
             builder.Property(r => r.IsActive)
                 .IsRequired();
+            
+            builder.Property(r => r.CreateDate)
+                .IsRequired(true);
+
+             builder.Property(r => r.UpdateDate)
+                .IsRequired(false); 
         }
     }
 }

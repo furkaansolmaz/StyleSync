@@ -1,17 +1,21 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SyncStyle.EnumType;
 
 namespace SyncStyle.Model
 {
-    public class StyleSyncProd
+    public class ContactMechanism
     {
         [Key]
-        public int StyleSyncProdId { get; set; }
+        public int Id { get; set; }
         [ForeignKey("User")]
         public int UserId { get; set; }
+        public string ContactMechanismInfo { get; set; } = string.Empty;
+        public ContactMechanismType ContactMechanismType { get; set; }
         public bool IsActive { get; set; }
-        public string ImageUrl { get; internal set;  } = string.Empty;
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
-    } 
+
+    }
+
 }

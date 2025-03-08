@@ -5,19 +5,19 @@ using SyncStyle.Model;
 
 namespace SyncStyle.EntityConfiguraiton 
 {
-    public class MemberEntityConfiguration : IEntityTypeConfiguration<User>
+    public class UserEntityConfiguration : IEntityTypeConfiguration<User>
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.ToTable("User");
 
-            builder.HasKey(ci => ci.Id);
+            builder.HasKey(ci => ci.UserId);
 
-            builder.Property(ci => ci.Id)
+            builder.Property(ci => ci.UserId)
                 .IsRequired()
                 .UseHiLo("user_id_hilo");
 
-            builder.Property(ct => ct.Name)
+            builder.Property(ct => ct.FirstName)
                 .HasColumnType("varchar(50)");  // nvarchar -> varchar
 
             builder.Property(ct => ct.LastName)
@@ -52,6 +52,12 @@ namespace SyncStyle.EntityConfiguraiton
 
             builder.Property(r => r.IsActive)
                 .IsRequired();
+            
+            builder.Property(r => r.CreateDate)
+                .IsRequired(true);
+
+             builder.Property(r => r.UpdateDate)
+                .IsRequired(false); 
         }
     }
 }

@@ -15,9 +15,9 @@ namespace SyncStyle.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] StyleSyncProdViewModel viewModel)
+        public async Task<IActionResult> Add([FromBody] StyleSyncProdViewModel viewModel, [FromForm] IFormFile imageFile)
         {
-            var result = await _styleSyncProdService.Add(viewModel);
+            var result = await _styleSyncProdService.Add(viewModel, imageFile);
             return Ok(result.StyleSyncProdId);
         }
         

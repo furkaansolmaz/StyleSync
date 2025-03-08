@@ -12,8 +12,8 @@ using SyncStyle.DbContexts;
 namespace SyncStyle.Migrations
 {
     [DbContext(typeof(StyleSyncContext))]
-    [Migration("20250118124221_Init")]
-    partial class Init
+    [Migration("20250308214226_Init1")]
+    partial class Init1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,11 +25,50 @@ namespace SyncStyle.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.HasSequence("contact_mechanism_id_hilo")
+                .IncrementsBy(10);
+
             modelBuilder.HasSequence("style_sync_prod_id_hilo")
                 .IncrementsBy(10);
 
             modelBuilder.HasSequence("user_id_hilo")
                 .IncrementsBy(10);
+
+            modelBuilder.Entity("SyncStyle.Model.ContactMechanism", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "contact_mechanism_id_hilo");
+
+                    b.Property<string>("ContactMechanismInfo")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("ContactMechanismType")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("ContactMechanism", (string)null);
+                });
 
             modelBuilder.Entity("SyncStyle.Model.StyleSyncProd", b =>
                 {
@@ -39,12 +78,18 @@ namespace SyncStyle.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("StyleSyncProdId"), "style_sync_prod_id_hilo");
 
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("varchar(160000)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -59,17 +104,24 @@ namespace SyncStyle.Migrations
 
             modelBuilder.Entity("SyncStyle.Model.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "user_id_hilo");
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("UserId"), "user_id_hilo");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("FailedLoginAttempts")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Gender")
                         .IsRequired()
@@ -78,11 +130,13 @@ namespace SyncStyle.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("Name")
+                    b.Property<DateTime>("LastFailedLoginAttempt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
@@ -94,13 +148,25 @@ namespace SyncStyle.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(10)");
 
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("User", (string)null);
+                });
+
+            modelBuilder.Entity("SyncStyle.Model.ContactMechanism", b =>
+                {
+                    b.HasOne("SyncStyle.Model.User", null)
+                        .WithMany("ContactMechanisms")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SyncStyle.Model.StyleSyncProd", b =>
@@ -114,6 +180,8 @@ namespace SyncStyle.Migrations
 
             modelBuilder.Entity("SyncStyle.Model.User", b =>
                 {
+                    b.Navigation("ContactMechanisms");
+
                     b.Navigation("StyleSyncProds");
                 });
 #pragma warning restore 612, 618

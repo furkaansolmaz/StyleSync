@@ -26,7 +26,7 @@ namespace SyncStyle.Services.Users
             
             var user = new User()
             {
-                Name = viewModel.Name,
+                FirstName = viewModel.Name,
                 LastName = viewModel.LastName,
                 UserName = viewModel.UserName,
                 Password = viewModel.Password,
@@ -42,8 +42,8 @@ namespace SyncStyle.Services.Users
 
             var response = new UserResponseViewModel()
             {
-                UserId = user.Id,
-                Name = user.Name,
+                UserId = user.UserId,
+                FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserName = user.UserName,
                 DateOfBirth = user.DateOfBirth,
@@ -56,7 +56,7 @@ namespace SyncStyle.Services.Users
 
         public async Task Delete(int memberId)
         {
-            var result = _styleSyncContext.Users.Where(i => i.Id == memberId && i.IsActive).FirstOrDefault();
+            var result = _styleSyncContext.Users.Where(i => i.UserId == memberId && i.IsActive).FirstOrDefault();
 
             if (result == null)
             {
@@ -87,7 +87,7 @@ namespace SyncStyle.Services.Users
             
             var user = new User
             {
-                Name = viewModel.Name,
+                FirstName = viewModel.Name,
                 LastName = viewModel.LastName,
                 UserName = viewModel.UserName,
                 Password = viewModel.Password,
@@ -103,8 +103,8 @@ namespace SyncStyle.Services.Users
 
             return new UserResponseViewModel
             {
-                UserId = user.Id,
-                Name = user.Name,
+                UserId = user.UserId,
+                FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserName = user.UserName,
                 DateOfBirth = user.DateOfBirth,

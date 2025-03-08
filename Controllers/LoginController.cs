@@ -27,5 +27,19 @@ namespace SyncStyle.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
+        {
+            try
+            {
+                var result = await _loginService.ResetPassword(model.UserName, model.Email);
+                return Ok(new { message = "Password reset instructions have been sent to your email." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

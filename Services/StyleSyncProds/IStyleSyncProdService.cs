@@ -7,7 +7,7 @@ namespace SyncStyle.Services.StyleSyncProds
     public interface IStyleSyncProdService
     {
         Task<List<StyleSyncProd>> GetList(int memberId);
-        Task<StyleSyncProd> Add(StyleSyncProdViewModel viewModel);
+        Task<StyleSyncProd> Add(StyleSyncProdViewModel viewModel, IFormFile imageFile);
         Task Delete(int styleSyncProdId);
     }
 }

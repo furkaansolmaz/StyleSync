@@ -16,12 +16,15 @@ namespace SyncStyle.DbContexts
         }
         public DbSet<User> Users { get; set; }
         public DbSet<StyleSyncProd> StyleSyncProds { get; set; }
+        public DbSet<ContactMechanism> ContactMechanisms { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new MemberEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
             modelBuilder.ApplyConfiguration(new StyleSyncEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ContactMechanismEntityConfiguration());
 
         }
 
